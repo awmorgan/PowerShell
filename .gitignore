@@ -1,0 +1,14 @@
+# Ignore PowerShell modules, they should be installed by the user
+/Modules/
+
+# Ignore user-specific and temporary files
+/Scripts/InstalledScriptInfos/
+*.log
+*.tmp
+
+# Ignore PowerShell history file (though your profile saves it outside this dir)
+.powershell_history
+
+# A common pattern for a file to hold secrets, API keys, etc.
+# Make sure to never commit this file.
+secrets.ps1
