@@ -11,9 +11,11 @@ Set-PSReadLineOption -EditMode Vi
 
 # --- Settings that ONLY work on modern PowerShell (v7+) ---
 if ($PSVersionTable.PSVersion.Major -ge 7) {
-    Set-PSReadLineOption -PredictionSource HistoryAndPlugin -PredictionViewStyle InlineView
-    Set-PSReadLineKeyHandler -ViMode Insert -Chord 'Ctrl+RightArrow' -Function AcceptNextSuggestionWord
-    Set-PSReadLineKeyHandler -ViMode Insert -Chord 'Tab' -Function AcceptSuggestion
+    # Set-PSReadLineOption -PredictionSource HistoryAndPlugin -PredictionViewStyle InlineView
+    Set-PSReadLineOption -PredictionSource HistoryAndPlugin -PredictionViewStyle ListView
+    # Set-PSReadLineKeyHandler -ViMode Insert -Chord 'Ctrl+RightArrow' -Function AcceptNextSuggestionWord
+    # Set-PSReadLineKeyHandler -ViMode Insert -Chord 'Tab' -Function AcceptSuggestion
+    # Set-PSReadLineKeyHandler -Key "Ctrl+Spacebar" -Function MenuComplete
 }
 
 # --- Cross-compatible prompt colors ---
