@@ -12,3 +12,6 @@
 # A common pattern for a file to hold secrets, API keys, etc.
 # Make sure to never commit this file.
 secrets.ps1
+
+# Ignore PowerShell configuration file
+powershell.config.json
