@@ -83,7 +83,8 @@ function prompt {
 
     if ($isModern) {
         $ansi = @{ Magenta = "`e[35m"; Yellow = "`e[33m"; Cyan = "`e[36m"; Reset = "`e[0m" }
-        $line = "{0}[PS{1} v{2}]{0} {3}{4}{5}" -f $ansi.Magenta, $ansi.Reset, $version, $ansi.Yellow, $path, $ansi.Reset
+        # Compose with distinct color segments: [PS <cyan>vX.Y</>]
+        $line = "{0}[PS{1} {2}v$version{0}] {3}{4}{1}" -f $ansi.Magenta, $ansi.Reset, $ansi.Cyan, $ansi.Yellow, $path
         $git = ""
         if (Get-Command -Name Write-VcsStatus -ErrorAction SilentlyContinue) {
             try { $git = Write-VcsStatus } catch { $git = "" }
