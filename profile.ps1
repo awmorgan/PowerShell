@@ -13,7 +13,7 @@ Set-PSReadLineOption -EditMode Vi
 if ($PSVersionTable.PSVersion.Major -ge 7) {
     Set-PSReadLineOption -PredictionSource HistoryAndPlugin -PredictionViewStyle InlineView
     Set-PSReadLineKeyHandler -ViMode Insert -Chord 'Ctrl+RightArrow' -Function AcceptNextSuggestionWord
-    Set-PSReadLineKeyHandler -ViMode Insert -Chord 'RightArrow' -Function ForwardChar
+    Set-PSReadLineKeyHandler -ViMode Insert -Chord 'Tab' -Function AcceptSuggestion
 }
 
 # --- Cross-compatible prompt colors ---
