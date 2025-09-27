@@ -67,17 +67,46 @@ function Write-ColoredText {
     }
 }
 
+# Import posh-git first so its functions are available
+if (Get-Module -ListAvailable -Name posh-git) {
+    Import-Module posh-git -ErrorAction SilentlyContinue
+    # optional: tweak settings, e.g. shorter branch display
+    # $GitPromptSettings.DefaultPromptAbbreviateHomeDirectory = $true
+}
+
 function prompt {
     $path = (Get-Location).ProviderPath
     $version = Get-PSVersionShort
-    
-    # Build the prompt: [PS v7.4] C:\Path\To\Directory
-    Write-ColoredText "[" $PromptColors.LabelColor -NoNewline
-    Write-ColoredText "PS" $PromptColors.LabelColor -NoNewline
-    Write-ColoredText " v$version" $PromptColors.VersionColor -NoNewline
-    Write-ColoredText "] " $PromptColors.LabelColor -NoNewline
-    Write-ColoredText $path $PromptColors.PathColor
-    
-    return "> "
-}
 
+    # We'll build the visible line in segments; for PS 6+ we can embed ANSI directly.
+    $isModern = $PSVersionTable.PSVersion.Major -ge 6
+
+    if ($isModern) {
+        $ansi = @{ Magenta = "`e[35m"; Yellow = "`e[33m"; Cyan = "`e[36m"; Reset = "`e[0m" }
+        $line = "{0}[PS{1} v{2}]{0} {3}{4}{5}" -f $ansi.Magenta, $ansi.Reset, $version, $ansi.Yellow, $path, $ansi.Reset
+        $git = ""
+        if (Get-Command -Name Write-VcsStatus -ErrorAction SilentlyContinue) {
+            try { $git = Write-VcsStatus } catch { $git = "" }
+            if ($git) { $line = "$line $git" }
+        }
+        # Write full prompt line then newline; return secondary prompt char
+        Write-Host $line
+        return "> "
+    }
+    else {
+        # Legacy PS 5.1 path: reuse Write-ColoredText pieces but capture posh-git first
+        $git = ""
+        if (Get-Command -Name Write-VcsStatus -ErrorAction SilentlyContinue) {
+            try { $git = Write-VcsStatus } catch { $git = "" }
+        }
+        # Print segments without trailing newline until done
+        Write-ColoredText "[" $PromptColors.LabelColor -NoNewline
+        Write-ColoredText "PS" $PromptColors.LabelColor -NoNewline
+        Write-ColoredText " v$version" $PromptColors.VersionColor -NoNewline
+        Write-ColoredText "] " $PromptColors.LabelColor -NoNewline
+        Write-ColoredText $path $PromptColors.PathColor -NoNewline
+        if ($git) { Write-Host " $git" -NoNewline }
+        Write-Host ""  # finish line
+        return "> "
+    }
+}
