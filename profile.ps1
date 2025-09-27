@@ -38,12 +38,12 @@ function Write-ColoredText {
         [string]$Color,
         [switch]$NoNewline
     )
-    
+
     if ($PSVersionTable.PSVersion.Major -ge 6) {
         # PS 6+ supports ANSI escape sequences reliably
         $ansiColors = @{
             'Magenta' = "`e[35m"
-            'Yellow'  = "`e[33m" 
+            'Yellow'  = "`e[33m"
             'Cyan'    = "`e[36m"
             'Reset'   = "`e[0m"
         }
