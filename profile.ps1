@@ -74,6 +74,7 @@ if (Get-Module -ListAvailable -Name posh-git) {
     Import-Module posh-git -ErrorAction SilentlyContinue
     # optional: tweak settings, e.g. shorter branch display
     # $GitPromptSettings.DefaultPromptAbbreviateHomeDirectory = $true
+    $GitPromptSettings.EnableFileStatus = $false
 }
 
 function prompt {
